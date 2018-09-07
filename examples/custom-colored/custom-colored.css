@@ -28,6 +28,7 @@ body { background: #fff; }
 
 .nodeExample1 img {
     margin-right:  10px;
+    max-width: 80px;
 }
 
 .gray {

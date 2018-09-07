@@ -680,7 +680,7 @@
                 var xTmp = node.prelim + X,
                     yTmp = Y, align = this.CONFIG.nodeAlign,
                     orient = this.CONFIG.rootOrientation,
-                    levelHeight, nodesizeTmp;
+                    levelHeight, nodesizeTmp, parentNode;
 
                 if (orient === 'NORTH' || orient === 'SOUTH') {
                     levelHeight = this.levelMaxDim[level].height;
@@ -709,7 +709,7 @@
 
                 } else {
                     node.Y = ( align === 'CENTER' ) ? (yTmp + (levelHeight - nodesizeTmp) / 2) :
-                        ( align === 'TOP' )  ? (yTmp + (levelHeight - nodesizeTmp)) :
+                        ( align === 'BOTTOM' )  ? (yTmp + (levelHeight - nodesizeTmp)) :
                             yTmp;
                 }
 
@@ -726,17 +726,27 @@
                     node.X = -node.X - nodesizeTmp;
                 }
 
+
+
+                //这里修改一下，子节点位置不按层级横向对其
+                parentNode = this.nodeDB && this.nodeDB.get(node.parentId);
+
                 if ( node.childrenCount() !== 0 ) {
                     if ( node.id === 0 && this.CONFIG.hideRootNode ) {
                         // ako je root node Hiden onda nemoj njegovu dijecu pomaknut po Y osi za Level separation, neka ona budu na vrhu
                         this.secondWalk(node.firstChild(), level + 1, X + node.modifier, Y);
                     }
                     else {
-                        this.secondWalk(node.firstChild(), level + 1, X + node.modifier, Y + levelHeight + this.CONFIG.levelSeparation);
+
+                        if (orient === "NORTH"){
+                            this.secondWalk(node.firstChild(), level + 1, X + node.modifier, Y + node.height + this.CONFIG.levelSeparation);
+                        }else{
+                            this.secondWalk(node.firstChild(), level + 1, X + node.modifier, Y + levelHeight + this.CONFIG.levelSeparation);
+                        }
                     }
                 }
 
-                if ( node.rightSibling() ) {
+                if (node.rightSibling()) {
                     this.secondWalk( node.rightSibling(), level, X, Y );
                 }
             }

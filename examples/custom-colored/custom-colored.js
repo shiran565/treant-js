@@ -1,7 +1,7 @@
 var config = {
         container: "#custom-colored",
 
-        nodeAlign: "BOTTOM",
+        nodeAlign: "TOP",
         
         connectors: {
             type: 'step'
